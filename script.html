@@ -1,0 +1,945 @@
+<script>
+	$(document).ready(function() {
+    
+    $('.changeItem').change(function(){
+        $('#generate').click();
+    });
+
+    $(document).keypress(function (e) {
+        var key = e.which;
+         if(key == 13)  // the enter key code
+         {
+            $('#generate').click();
+             return false;  
+          }
+    });
+    
+    $('#video-button').hide();
+    
+    var testing = false;
+    $('#generate').click(function(){
+        if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
+        $('#plot').hide();
+
+        var type;
+        // handles the formatting for selecting any type
+        if($("#type").val()=="any"){type = random(1,6);}
+        else{type = parseInt($("#type").val())}
+
+        generate(type);       
+     });
+
+
+    $("#show-answer").click(function(){
+       if($("#answer").is(":hidden") ){
+          $("#answer").show();
+          $("#show-answer").val("Hide Answer");
+       } else{
+         $("#answer").hide();
+         $("#show-answer").val("Show Answer");
+        }
+    });
+    
+    if(testing){ $("#answer").show();}
+    
+	});
+	function generate(type){
+       
+       var videoLinks = ["https://www.youtube.com/watch?v=KAFN6V-rmaU",
+                         "https://www.youtube.com/watch?v=ya5_1IeU5yg",
+                         "https://www.youtube.com/watch?v=ii0nhp0gxEs",
+                         "https://www.youtube.com/watch?v=hig70dJNszk",
+                         "https://www.youtube.com/watch?v=cCEOefbaLak",
+                         "https://www.youtube.com/watch?v=qXXcQZ5S9Vc"];
+       
+       if(videoLinks[type-1].length != 0){ 
+         $("#videoLink"). attr("href", videoLinks[type-1]);
+         $('#video-button').show();
+       }
+       else{
+         $('#video-button').hide();
+       }
+       
+       var problem = "";
+       var answer = "";
+       var a,b,c,d,e,f,g,h,sf;
+       var shape;
+       var graphShapes = [];
+       $("#generated").html("");
+       $("#answer").html("");
+   
+       switch(type) {
+           // Translations
+           case 1:   
+           
+           // starting shape
+           shape = generateShape(); 
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)";
+           
+           var tr = translate(shape); // using helper function
+           graphShapes= [shape,tr.transformed];
+           
+           switch(random(0,1)){
+              
+              // apply a translation to coordinate(s) on a grid to produce new coordinate(s)
+              case 0:     
+              problem = "Apply the rule "+tr.rule+" to the shape graphed below.";    
+              problem += "<br>"+coordString;
+              draw([shape],'plot');
+              $('#plot').show();                           
+              draw(graphShapes,'answer');              
+              break;
+              
+              // determine the rule for the graphed translation
+              case 1:
+              problem = "Determine the rule used to do the translation below";
+              answer = tr.rule;
+              draw(graphShapes,'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+              break;
+           }
+           
+           break;
+           
+           // Rotations
+           case 2: 
+           
+           // starting shape
+           shape = generateShape();
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)";
+           var rotated = rotate(shape); // using helper function
+           graphShapes= [shape,rotated.transformed];
+           
+           switch(random(0,1)){
+              
+              // apply a rotation to coordinate(s) on a grid to produce new coordinate(s)
+              case 0:
+              problem = "Perform the following transformation to the shape below: "+rotated.rot;
+              problem += "<br>"+coordString;
+              draw([shape],'plot');
+              $('#plot').show();                           
+              draw(graphShapes,'answer');
+              break;
+              
+              // determine the rotation used for a graphed figure
+              case 1:
+              problem = "Determine the rotation done to produce the shapes below";
+              answer = rotated.rot;
+              draw(graphShapes,'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+              break;
+           }                
+           
+           break;
+           
+           // Reflections
+           case 3: 
+           // starting shape
+           shape = generateShape();
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)";
+           var reflected = reflect(shape); // using helper function
+           graphShapes= [shape,reflected.transformed];
+           
+           switch(random(0,1)){
+              
+              // apply a reflection to coordinate(s) on a grid to produce new coordinate(s)
+              case 0:
+              problem = "Perform the following transformation to the shape below: "+reflected.ref;
+              problem += "<br>"+coordString;
+              draw([shape],'plot');
+              $('#plot').show();                           
+              draw(graphShapes,'answer');
+              break;
+              
+              // determine the reflection used for a graphed figure
+              case 1:
+              problem = "Determine the reflection done to produce the shapes below";
+              answer = reflected.ref;
+              draw(graphShapes,'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+              break;
+           }
+           
+           break;
+           
+           
+           
+           // Dilations
+           case 4: 
+           shape = generateShapeBounds(-3,3);
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)";           
+           var dilated = dilate(shape); // using helper function
+           graphShapes= [shape,dilated.transformed];
+           
+           switch(random(0,1)){
+              
+              // apply a dilation to coordinate(s) on a grid to produce new coordinate(s)
+              case 0:     
+              problem = "Apply the rule "+dilated.rule+" to the shape graphed below.";    
+              problem += "<br>"+coordString;          
+              draw([shape],'plot');
+              $('#plot').show();                           
+              draw(graphShapes,'answer');              
+              break;
+              
+              // determine the rule for the graphed dilation
+              case 1:
+              problem = "Determine the rule used to do the dilation below";
+              answer = dilated.rule;
+              draw(graphShapes,'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+              break;
+           }  
+           break;
+           
+           // Compositions
+           case 5: 
+           shape = generateShape();
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)"; 
+           var tempProb = "Perform the following transformations to the shape below: <br>"+coordString+"<br>";             
+           graphShapes=[shape];
+           draw([shape],'plot');
+           $('#plot').show(); 
+           problem = compositions(shape,0,tempProb,graphShapes);   
+           break;
+           
+           // Compositions with Dilations first
+           case 6: 
+           shape = generateShapeBounds(-3,3);       
+           var coordString = "\\(";
+           // use length -1 since the first one repeats
+           for(var i = 0; i < shape[0].length-1; i ++){    
+               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           }
+           coordString += "\\)"; 
+           var dilated = dilate(shape); // using helper function
+           var tempProb = "Perform the following transformations to the shape below: <br>"+coordString+"<br>";
+           tempProb += "1. Apply the rule "+dilated.rule+"<br>"; 
+           graphShapes= [shape,dilated.transformed];
+           draw([shape],'plot');
+           $('#plot').show(); 
+           problem = compositions(dilated.transformed,1,tempProb,graphShapes);           
+           break;
+           
+       }
+            
+       $("#generated").html(doublesigns(problem));              
+       renderMathInElement(document.body);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
+       
+	}
+    
+    function generateShape(){
+       
+       return generateShapeBounds(-8,8);
+    
+    }
+    
+    // helper function to generate a shape within 10 by 10 grid
+    function generateShapeBounds(min,max){
+       
+       var xValues = [];
+       var yValues = [];
+       var letters = [];
+       var x1,x2,x3,x4,y1,y2,y3,y4;
+       
+       // **Important** Needed to change max & min x & y values to be 8 and -8 so that 
+       // in translate(), the non_zero_random doesn't loop forever between 0 and 0
+       // Happens when max is 9 and min is -9 for either x or y
+       
+       switch(random(0,2)){
+         
+         // triangle
+         case 0:
+         x1 = random(min, max/2); 
+         y1 = random(min, max/2); 
+         x2 = random(x1+1, max); 
+         y2 = random(min, max/2); 
+         x3 = random(x1,x2);
+         y3 = random(Math.max(y1,y2)+1, max); 
+         
+         xValues = [x1,x2,x3,x1];
+         yValues = [y1,y2,y3,y1];
+         letters = ['A','B','C','A'];
+         break;
+         
+         // rectangle
+         case 1:
+         x1 = random(min, max/2);
+         y1 = random(min, max/2);
+         x2 = random(x1+1, max);
+         y2 = random(y1+1,max);
+         
+         xValues = [x1,x2,x2,x1,x1];
+         yValues = [y1,y1,y2,y2,y1];
+         letters = ['A','B','C','D','A'];
+         break;
+        
+         // parallelogram
+         case 2:
+         x1 = random(min, max/2);
+         y1 = random(min, max/2);
+         y2 = random(y1+1,max);
+         x2 = random(x1+3,max);
+         x3 = random(x1+1,x2-1);
+         x4 = x2-(x3-x1);
+         
+         xValues = [x1,x4,x2,x3,x1];
+         yValues = [y1,y1,y2,y2,y1];
+         letters = ['A','B','C','D','A'];
+         break;        
+         
+       }
+      
+      return [xValues,yValues,letters];
+      
+    }
+    
+    // helper function for translating
+    function translate(shape){
+       
+           var transformedShape = [];
+           var newXs = [];
+           var newYs = [];
+           var newLs = [];           
+           var oldX, oldY, tempX, tempY;           
+           var coordinateRule = "";
+           var coordinates = "";
+           
+           // **Important** Needed to change max & min x & y values to be 8 and -8 so that this doesn't loop forever between 0 and 0
+           // Happens when max is 9 and min is -9 for either x or y
+           var xChange = non_zero_random(Math.ceil(-9-getMin(shape[0])),Math.floor(9-getMax(shape[0])));
+           var yChange = non_zero_random(Math.ceil(-9-getMin(shape[1])),Math.floor(9-getMax(shape[1])));
+           
+           coordinateRule = "\\((x + "+xChange+", y + "+yChange+")\\)";                             
+           
+           for(var i = 0; i < shape[0].length; i++){ 
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX+xChange;   // change x
+                tempY = oldY+yChange;   // change y
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }                
+           }
+                     
+           transformedShape = [newXs,newYs,newLs];
+                             
+           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates};
+    }
+    
+    // helper function for rotating
+    function rotate(shape){
+       
+           var transformedShape = [];          
+           var newXs = [];
+           var newYs = [];
+           var newLs = [];
+           var oldX, oldY, tempX, tempY;
+           var rotation;
+           var coordinates = "";
+           
+           // pick between different rotations
+           switch(random(0,2)){
+              
+              // rotation 90 ccw, 270 cw (same thing)
+              case 0:              
+              rotation = "Rotation of 90° counterclockwise (270° CW) about the origin";
+              
+              for(var i = 0; i < shape[0].length; i++){
+                                 
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldY*-1;   // make x = -y
+                tempY = oldX;      // make y = x
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+              }
+              
+              break; // main case 0 rotation 90 ccw, 270 cw
+              
+              // rotation 90 cw, 270 ccw (same thing)
+              case 1:              
+              
+              rotation = "Rotation of 90° clockwise (270° CCW) about the origin";
+              
+              for(var i = 0; i < shape[0].length; i++){
+                 
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldY;         // make x = y
+                tempY = oldX*-1;      // make y = -x
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+              }
+              
+              break; // main case 1 rotation 90 cw, 270 ccw
+           
+              // rotation 180 (same thing)
+              case 2:
+              rotation = "Rotation of 180° about the origin";
+              
+              for(var i = 0; i < shape[0].length; i++){
+                 
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX*-1;         // make x = -x
+                tempY = oldY*-1;      // make y = -y
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+              }
+              
+              break; // main case 2 180 rotation
+           }                    
+                     
+           transformedShape = [newXs,newYs,newLs];
+          
+           return {transformed:transformedShape, rot:rotation, coor: coordinates};
+    }
+    
+    
+    // helper function for reflecting
+    function reflect(shape){
+       
+           var transformedShape = [];          
+           var newXs = [];
+           var newYs = [];
+           var newLs = [];
+           var oldX, oldY, tempX, tempY;
+           var reflection;
+           var coordinates = "";
+           
+        //switch(random(0,4)){
+        switch(random(0,3)){
+           
+           // x-axis reflection
+           case 0:
+           
+           reflection = "Reflection over the \\(x\\)-axis";
+           
+           // do the reflection
+           for(var i = 0; i < shape[0].length; i++){
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX;         // keep x the same
+                tempY = oldY*-1;      // make y = -y
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+           }
+           break;
+           
+           // y-axis reflection
+           case 1:
+           reflection = "Reflection over the \\(y\\)-axis";
+           
+           // do the reflection
+           for(var i = 0; i < shape[0].length; i++){
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX*-1;   // make x = -x
+                tempY = oldY;      // keep y the same
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+           }
+           break;
+           
+           // y= equation reflection
+           case 2:
+           var a = findReflectionY(shape); // very complicated to do this, use helper function
+           reflection = "Reflection over the line \\(y="+a+"\\)";
+           
+           if(a === 0){ reflection += " (\\(x\\)-axis)"; }
+          
+           // do the reflection
+           for(var i = 0; i < shape[0].length; i++){
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX;                // keep x the same
+                tempY = oldY-((oldY-a)*2);   // reflect y over the line of reflection
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+           }
+           break;
+           
+           // x= equation reflection
+           case 3:
+           var a = findReflectionX(shape); // very complicated to do this, use helper function
+           reflection = "Reflection over the line \\(x="+a+"\\)";
+           
+           if(a === 0){ reflection += " (\\(y\\)-axis)"; }
+          
+           // do the reflection
+           for(var i = 0; i < shape[0].length; i++){
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX-((oldX-a)*2);      // reflect x over the line of reflection
+                tempY = oldY;                   // keep y the same
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+           }
+           break;
+           
+           // y=x equation of reflection
+           /*
+           case 4:
+           
+           reflection = "Reflection over the line \\(y=x\\)";
+                     
+           // do the reflection
+           for(var i = 0; i < shape[0].length; i++){
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldY;      // make x = y
+                tempY = oldX;      // make y = x
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }
+           }
+           break;
+           */
+           
+        }                    
+                     
+           transformedShape = [newXs,newYs,newLs];
+          
+           return {transformed:transformedShape, ref:reflection, coor: coordinates};
+    }
+    
+    // helper function for dilating
+    function dilate(shape){
+       
+           var transformedShape = [];
+           var newXs = [];
+           var newYs = [];
+           var newLs = [];           
+           var oldX, oldY, tempX, tempY;           
+           var coordinateRule = "";
+           var coordinates = "";
+           var sf = random(1.5, 2.5, 0.5);
+                                 
+           coordinateRule = "\\(("+sf+"x, "+sf+"y)\\)";                             
+           
+           for(var i = 0; i < shape[0].length; i++){ 
+                
+                oldX = parseFloat(shape[0][i]);
+                oldY = parseFloat(shape[1][i]);
+                
+                tempX = oldX*sf;   // change x
+                tempY = oldY*sf;   // change y
+                
+                newXs.push(tempX);                   
+                newYs.push(tempY);     
+                newLs.push(shape[2][i]+"'");
+                if(i != shape[0].length-1){                 
+                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                }                
+           }
+                     
+           transformedShape = [newXs,newYs,newLs];
+                             
+           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates};
+    }
+    
+    // helper function so that compositions can be done on their own or with dilations first
+    function compositions(shape,num,problem,graphShapes){
+       
+       var translated, rotated, reflected, problem;
+         
+           switch(random(0,11)){
+              
+              // translation + rotation
+              case 0:
+              translated = translate(shape); // using helper function              
+              rotated = rotate(translated.transformed); // using helper function
+              graphShapes.push(translated.transformed,rotated.transformed);              
+              problem += (num+1)+". Apply the rule "+translated.rule+"<br>";
+              problem += (num+2)+". "+rotated.rot;                                        
+              break;
+              
+              // rotation + translation
+              case 1:
+              rotated = rotate(shape); // using helper function              
+              translated = translate(rotated.transformed); // using helper function
+              graphShapes.push(rotated.transformed,translated.transformed);
+              problem += (num+1)+". "+rotated.rot+"<br>";
+              problem += (num+2)+". Apply the rule "+translated.rule;                                        
+              break;
+              
+              // translation + reflection
+              case 2:
+              translated = translate(shape); // using helper function              
+              reflected = reflect(translated.transformed); // using helper function
+              graphShapes.push(translated.transformed,reflected.transformed);
+              problem += (num+1)+". Apply the rule "+translated.rule+"<br>";
+              problem += (num+2)+". "+reflected.ref;                                   
+              break;
+              
+              // reflection + translation
+              case 3:
+              reflected = reflect(shape); // using helper function              
+              translated = translate(reflected.transformed); // using helper function
+              graphShapes.push(reflected.transformed,translated.transformed);
+              problem += (num+1)+". "+reflected.ref+"<br>";
+              problem += (num+2)+". Apply the rule "+translated.rule;             
+              break;
+              
+              // rotation + reflection
+              case 4:
+              rotated = rotate(shape); // using helper function              
+              reflected = reflect(rotated.transformed); // using helper function
+              graphShapes.push(rotated.transformed,reflected.transformed);
+              problem += (num+1)+". "+rotated.rot+"<br>";
+              problem += (num+2)+". "+reflected.ref;      
+              break;
+              
+              // reflection + rotation
+              case 5:
+              reflected = reflect(shape); // using helper function              
+              rotated = rotate(reflected.transformed); // using helper function
+              graphShapes.push(reflected.transformed,rotated.transformed);
+              problem += (num+1)+". "+reflected.ref+"<br>";
+              problem += (num+2)+". "+rotated.rot;
+              break;
+              
+              // translation, rotation, and reflection
+              case 6:
+              translated = translate(shape); // using helper function  
+              rotated = rotate(translated.transformed); // using helper function              
+              reflected = reflect(rotated.transformed); // using helper function
+              graphShapes.push(translated.transformed,rotated.transformed,reflected.transformed);
+              problem += (num+1)+". Apply the rule "+translated.rule+"<br>";
+              problem += (num+2)+". "+rotated.rot+"<br>";
+              problem += (num+3)+". "+reflected.ref;
+              break;
+              
+              // translation, reflection, and rotation
+              case 7:
+              translated = translate(shape); // using helper function  
+              reflected = reflect(translated.transformed); // using helper function              
+              rotated = rotate(reflected.transformed); // using helper function
+              graphShapes.push(translated.transformed,reflected.transformed,rotated.transformed);
+              problem += (num+1)+". Apply the rule "+translated.rule+"<br>";
+              problem += (num+2)+". "+reflected.ref+"<br>";
+              problem += (num+3)+". "+rotated.rot;             
+              break;
+              
+              // reflection, translation, and rotation
+              case 8:
+              reflected = reflect(shape); // using helper function  
+              translated = translate(reflected.transformed); // using helper function              
+              rotated = rotate(translated.transformed); // using helper function
+              graphShapes.push(reflected.transformed,translated.transformed,rotated.transformed);
+              problem += (num+1)+". "+reflected.ref+"<br>";
+              problem += (num+2)+". Apply the rule "+translated.rule+"<br>";              
+              problem += (num+3)+". "+rotated.rot;             
+              break;
+              
+              // reflection, rotation, and translation
+              case 9:
+              reflected = reflect(shape); // using helper function  
+              rotated = rotate(reflected.transformed); // using helper function              
+              translated = translate(rotated.transformed); // using helper function
+              graphShapes.push(reflected.transformed,rotated.transformed,translated.transformed);
+              problem += (num+1)+". "+reflected.ref+"<br>";
+              problem += (num+2)+". "+rotated.rot+"<br>";
+              problem += (num+3)+". Apply the rule "+translated.rule;                                         
+              break;
+              
+              // rotation, reflection, and translation
+              case 10:
+              rotated = rotate(shape); // using helper function  
+              reflected = reflect(rotated.transformed); // using helper function              
+              translated = translate(reflected.transformed); // using helper function
+              graphShapes.push(rotated.transformed,reflected.transformed,translated.transformed);
+              problem += (num+1)+". "+rotated.rot+"<br>";
+              problem += (num+2)+". "+reflected.ref+"<br>";
+              problem += (num+3)+". Apply the rule "+translated.rule;                                         
+              break;
+              
+              // rotation, translation, and reflection
+              case 11:
+              rotated = rotate(shape); // using helper function  
+              translated = translate(rotated.transformed); // using helper function              
+              reflected = reflect(translated.transformed); // using helper function
+              graphShapes.push(rotated.transformed,translated.transformed,reflected.transformed);
+              problem += (num+1)+". "+rotated.rot+"<br>";             
+              problem += (num+2)+". Apply the rule "+translated.rule+"<br>";  
+              problem += (num+3)+". "+reflected.ref;                                                     
+              break;
+           }
+       draw(graphShapes,'answer');
+       return problem;
+    }
+    
+    
+    // helper function to find the smallest value in an array of numbers
+    function getMin(array){
+       
+        return Math.min(...array);
+    
+    }
+    
+    // helper function to find the largest value in an array of numbers
+    function getMax(array){
+       
+        return Math.max(...array);
+    
+    }
+    
+    // helper function to determine which value of a for y=a will reflect the shape and keep it on the grid
+    function findReflectionY(shape){
+        
+        var min = Math.floor(getMax(shape[1])/2)-4;
+        var max = Math.floor(getMin(shape[1])/2)+4;
+        
+        return random(min,max);
+      
+    }
+    
+    // helper function to determine which value of a for y=a will reflect the shape and keep it on the grid
+    function findReflectionX(shape){
+        
+        var min = Math.floor(getMax(shape[0])/2)-4;
+        var max = Math.floor(getMin(shape[0])/2)+4;
+        
+        return random(min,max);
+      
+    }
+    
+    // function that draws the shapes using coordinates
+    function draw(shapes, location) {
+    
+    // shapes = [ [xVals[], yVals[], letters[]], [xVals[], yVals[], letters[]]...]
+     
+     // draw each shape a different color
+     var colors = ['#3F4591', '#129649','#6339a8','#ce3b21','#ed9025'];
+     
+     var data = [];
+      // for each shape, create a trace using the coordinates and lines connecting them
+      for(var i = 0; i < shapes.length; i++){
+  
+         var newTrace = {  
+            x: shapes[i][0],
+            y: shapes[i][1],
+            type: 'scatter',
+            mode: 'lines+markers+text',        
+            line: {
+              color: colors[i],
+              width: 2
+            },
+            text: shapes[i][2],
+            textposition: 'bottom',
+            name:"",
+         };
+         
+         data.push(newTrace);
+      }
+      
+      var axis_template ={
+        showgrid: true,
+        zeroline: true,
+        nticks: 23,
+        range: [-11,11], 
+        gridcolor: '#bdbdbd', //grid color
+        gridwidth: 1.2, //grid width
+        zerolinecolor: 'black', // axes color
+        zerolinewidth: 1.5, // axes widths
+        showticklabels:false
+      };        
+      
+      var xTickMarkLabels =   {
+        x: [-10.1,-9.1,-8.1,-7.1,-6.1,-5.1,-4.1,-3.1,-2.1,-1.1,0,1,2,3,4,5,6,7,8,9,10],
+        y: [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1],
+        mode: 'text',
+        text:[-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10],
+        textposition:"bottom",
+        textfont: {
+          size:13,
+        },
+        hoverinfo:'none'
+      };   
+      
+      var yTickMarkLabels =   {
+        y: [-10.1,-9.1,-8.1,-7.1,-6.1,-5.1,-4.1,-3.1,-2.1,-1.1,0,1,2,3,4,5,6,7,8,9,10],
+        x: [-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1,-0.1],
+        mode: 'text',
+        text:[-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10],
+        textposition:"left",
+        textfont: {
+          size:13,
+        },
+        hoverinfo:'none'
+      };
+      
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 550;
+         indent = 20;
+      }else{
+         gridsize = 350;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        hovermode: 'closest',   
+        font:{size: 18},
+        margin: {l: indent,  r: 30, t: 20}
+      };
+      
+      layout.annotations= [
+      {
+         x: 0,
+         y: 11,
+         showarrow: true,
+         arrowsize:2,
+         arrowwidth:1,
+         arrowhead:3,
+         ax: 0,
+         ay: 35
+       },
+       {
+         x: 0,
+         y: -11,
+         showarrow: true,
+         arrowsize:2,
+         arrowwidth:1,
+         arrowhead:3,
+         ax: 0,
+         ay: -35
+       },
+       {
+         x: 11,
+         y: 0,
+         showarrow: true,
+         arrowsize:2,
+         arrowwidth:1,
+         arrowhead:3,
+         ax: -35,
+         ay: 0
+       },
+       {
+         x: -11,
+         y: 0,
+         showarrow: true,
+         arrowsize:2,
+         arrowwidth:1,
+         arrowhead:3,
+         ax: 35,
+         ay: 0
+       }
+
+     ];
+     
+     data.push(xTickMarkLabels,yTickMarkLabels);
+      
+      Plotly.newPlot(location, data, layout,{displayModeBar: false});
+  }
+  function genCharArray(charA, charZ) {
+    var a = [], i = charA.charCodeAt(0), j = charZ.charCodeAt(0);
+    for (; i <= j; ++i) {
+        a.push(String.fromCharCode(i));
+    }
+    return a;
+}
+
+</script>
