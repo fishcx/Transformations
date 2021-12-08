@@ -87,7 +87,7 @@
            switch(random(0,1)){
               
               // apply a translation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0:     
+              case 0: case 1: case 2: case 3: case 4:
               problem = "Apply the rule "+tr.rule+" to the shape graphed below.";    
               problem += "<br>"+coordString;
               draw([shape],'plot');
@@ -96,7 +96,7 @@
               break;
               
               // determine the rule for the graphed translation
-              case 1:
+              case 5:
               problem = "Determine the rule used to do the translation below";
               answer = tr.rule;
               draw(graphShapes,'plot');
@@ -122,10 +122,10 @@
            var rotated = rotate(shape); // using helper function
            graphShapes= [shape,rotated.transformed];
            
-           switch(random(0,1)){
+           switch(random(0,5)){
               
               // apply a rotation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0:
+              case 0: case 1: case 2: case 3: case 4:
               problem = "Perform the following transformation to the shape below: "+rotated.rot;
               problem += "<br>"+coordString;
               draw([shape],'plot');
@@ -134,7 +134,7 @@
               break;
               
               // determine the rotation used for a graphed figure
-              case 1:
+              case 5:
               problem = "Determine the rotation done to produce the shapes below";
               answer = rotated.rot;
               draw(graphShapes,'plot');
@@ -159,10 +159,10 @@
            var reflected = reflect(shape); // using helper function
            graphShapes= [shape,reflected.transformed];
            
-           switch(random(0,1)){
+           switch(random(0,5)){
               
               // apply a reflection to coordinate(s) on a grid to produce new coordinate(s)
-              case 0:
+              case 0: case 1: case 2: case 3: case 4: 
               problem = "Perform the following transformation to the shape below: "+reflected.ref;
               problem += "<br>"+coordString;
               draw([shape],'plot');
@@ -171,7 +171,7 @@
               break;
               
               // determine the reflection used for a graphed figure
-              case 1:
+              case 5:
               problem = "Determine the reflection done to produce the shapes below";
               answer = reflected.ref;
               draw(graphShapes,'plot');
@@ -197,10 +197,10 @@
            var dilated = dilate(shape); // using helper function
            graphShapes= [shape,dilated.transformed];
            
-           switch(random(0,1)){
+           switch(random(0,5)){
               
               // apply a dilation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0:     
+              case 0:  case 1: case 2: case 3: case 4:   
               problem = "Apply the rule "+dilated.rule+" to the shape graphed below.";    
               problem += "<br>"+coordString;          
               draw([shape],'plot');
@@ -209,7 +209,7 @@
               break;
               
               // determine the rule for the graphed dilation
-              case 1:
+              case 5:
               problem = "Determine the rule used to do the dilation below";
               answer = dilated.rule;
               draw(graphShapes,'plot');
