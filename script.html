@@ -21,12 +21,17 @@
         if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
         $('#plot').hide();
 
+        var createShape = true;
+        // determine if create shape active or not
+        if($("#toggle").is(':checked')){  createShape = false;  }
+        
+
         var type;
         // handles the formatting for selecting any type
         if($("#type").val()=="any"){type = random(1,6);}
         else{type = parseInt($("#type").val())}
 
-        generate(type);       
+        generate(type,createShape);       
      });
 
 
@@ -43,7 +48,7 @@
     if(testing){ $("#answer").show();}
     
 	});
-	function generate(type){
+	function generate(type,createShape){
        
        var videoLinks = ["https://www.youtube.com/watch?v=KAFN6V-rmaU",
                          "https://www.youtube.com/watch?v=ptZKHdfrQUc",
@@ -84,26 +89,24 @@
            var tr = translate(shape); // using helper function
            graphShapes= [shape,tr.transformed];
            
-           switch(random(0,1)){
-              
+           if(createShape){
               // apply a translation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0: case 1: case 2: case 3: case 4:
               problem = "Translate \\("+shape[3]+"\\) using"+tr.rule;    
               problem += "<br>"+coordString;
               draw([shape],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');              
-              break;
               
+           }
+           else {
               // determine the rule for the graphed translation
-              case 5:
               problem = "Determine the rule used to do the translation below";
               answer = tr.rule;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
               //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-              break;
+              
            }
            
            break;
@@ -122,26 +125,24 @@
            var rotated = rotate(shape); // using helper function
            graphShapes= [shape,rotated.transformed];
            
-           switch(random(0,5)){
+           if(createShape){
               
               // apply a rotation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0: case 1: case 2: case 3: case 4:
               problem = "Rotate \\("+shape[3]+"\\) "+rotated.rot;
               problem += "<br>"+coordString;
               draw([shape],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');
-              break;
+           }else{
               
               // determine the rotation used for a graphed figure
-              case 5:
               problem = "Determine the rotation done to produce the shapes below";
               answer = "Rotation of "+rotated.rot;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
               //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-              break;
+
            }                
            
            break;
@@ -159,26 +160,24 @@
            var reflected = reflect(shape); // using helper function
            graphShapes= [shape,reflected.transformed];
            
-           switch(random(0,5)){
+           if(createShape){
               
               // apply a reflection to coordinate(s) on a grid to produce new coordinate(s)
-              case 0: case 1: case 2: case 3: case 4: 
+
               problem = "Reflect \\("+shape[3]+"\\) "+reflected.ref;
               problem += "<br>"+coordString;
               draw([shape],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');
-              break;
+           }else{
               
               // determine the reflection used for a graphed figure
-              case 5:
               problem = "Determine the reflection done to produce the shapes below";
               answer = "Reflection "+reflected.ref;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
               //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-              break;
            }
            
            break;
@@ -197,37 +196,31 @@
            var dilated = dilate(shape); // using helper function
            graphShapes= [shape,dilated.transformed];
            
-           switch(random(0,5)){
+           if(createShape){
               
-              // apply a dilation to coordinate(s) on a grid to produce new coordinate(s)
-              case 0:  case 1: case 2: case 3: case 4:   
+              // apply a dilation to coordinate(s) on a grid to produce new coordinate(s) 
               
-          var msg = "";
-           if(random(0,1) == 0){
-
-              msg = "Dilate \\("+shape[3]+"\\) using "+dilated.rule; 
-
-           }else{
-
+            var msg = "";
+            if(random(0,1) == 0){
+               msg = "Dilate \\("+shape[3]+"\\) using "+dilated.rule; 
+            }else{
               msg = "Dilate \\("+shape[3]+"\\) using a scale factor of "+dilated.scaleFactor+" about the origin"; 
-
-           }
+             }
               problem = msg;
               problem += "<br>"+coordString;          
               draw([shape],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');              
-              break;
-              
+            
+           }else{
               // determine the rule for the graphed dilation
-              case 5:
+             
               problem = "Determine the rule used to do the dilation below";
               answer = dilated.rule;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
               //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-              break;
            }  
            break;
            

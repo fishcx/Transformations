@@ -34,6 +34,8 @@
             <option value=5>Compositions</option>
             <option value=6>Compositions with Dilations</option>           
          </select><input type="button" value="Generate" id="generate" class="btn btn-main">
+         <br>
+         <input type="checkbox" data-toggle="toggle" data-on="Find Rule" data-off="Draw Shape" id="toggle" name="toggle" data-offstyle="btn btn-main btn-toggle btn-sm" data-onstyle="btn btn-info btn-toggle btn-sm" class="changeItem">
            <p class="p2"><a target=”_blank” href="https://drive.google.com/open?id=13cKnSUD8j2ePdDM0C2ZZ4HFcnWWyKbL2">Download Grid Paper</a></p>
            <div id="generated"></div>   
        
@@ -45,4 +47,5 @@
   </body>
 </html>
 <?!= include('script'); ?> 
+<?!= include('toggle'); ?> 
 <?!= include('helperscript'); ?> 
