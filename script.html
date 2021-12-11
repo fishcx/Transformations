@@ -81,19 +81,19 @@
            shape = generateShape(); 
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)";
            
            var tr = translate(shape); // using helper function
-           graphShapes= [shape,tr.transformed];
+           graphShapes= [[shape.xVals,shape.yVals,shape.letters],tr.transformed];
            
            if(createShape){
               // apply a translation to coordinate(s) on a grid to produce new coordinate(s)
-              problem = "Translate \\("+shape[3]+"\\) using"+tr.rule;    
+              problem = "Translate \\("+shape.name+"\\) using"+tr.rule;    
               problem += "<br>"+coordString;
-              draw([shape],'plot');
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');              
               
@@ -118,19 +118,19 @@
            shape = generateShape();
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)";
            var rotated = rotate(shape); // using helper function
-           graphShapes= [shape,rotated.transformed];
+           graphShapes= [[shape.xVals,shape.yVals,shape.letters],rotated.transformed];
            
            if(createShape){
               
               // apply a rotation to coordinate(s) on a grid to produce new coordinate(s)
-              problem = "Rotate \\("+shape[3]+"\\) "+rotated.rot;
+              problem = "Rotate \\("+shape.name+"\\) "+rotated.rot;
               problem += "<br>"+coordString;
-              draw([shape],'plot');
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');
            }else{
@@ -153,20 +153,20 @@
            shape = generateShape();
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)";
            var reflected = reflect(shape); // using helper function
-           graphShapes= [shape,reflected.transformed];
+           graphShapes= [[shape.xVals,shape.yVals,shape.letters],reflected.transformed];
            
            if(createShape){
               
               // apply a reflection to coordinate(s) on a grid to produce new coordinate(s)
 
-              problem = "Reflect \\("+shape[3]+"\\) "+reflected.ref;
+              problem = "Reflect \\("+shape.name+"\\) "+reflected.ref;
               problem += "<br>"+coordString;
-              draw([shape],'plot');
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');
            }else{
@@ -189,12 +189,12 @@
            shape = generateShapeBounds(-3,3);
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)";           
            var dilated = dilate(shape); // using helper function
-           graphShapes= [shape,dilated.transformed];
+           graphShapes= [[shape.xVals,shape.yVals,shape.letters],dilated.transformed];
            
            if(createShape){
               
@@ -202,13 +202,13 @@
               
             var msg = "";
             if(random(0,1) == 0){
-               msg = "Dilate \\("+shape[3]+"\\) using "+dilated.rule; 
+               msg = "Dilate \\("+shape.name+"\\) using "+dilated.rule; 
             }else{
-              msg = "Dilate \\("+shape[3]+"\\) using a scale factor of "+dilated.scaleFactor+" about the origin"; 
+              msg = "Dilate \\("+shape.name+"\\) using a scale factor of "+dilated.scaleFactor+" about the origin"; 
              }
               problem = msg;
               problem += "<br>"+coordString;          
-              draw([shape],'plot');
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');              
             
@@ -229,13 +229,13 @@
            shape = generateShape();
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)"; 
            var tempProb = "Perform the following transformations to the shape below: <br>"+coordString+"<br>";             
-           graphShapes=[shape];
-           draw([shape],'plot');
+           graphShapes=[[shape.xVals,shape.yVals,shape.letters]];
+           draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
            $('#plot').show(); 
            problem = compositions(shape,0,tempProb,graphShapes);   
            break;
@@ -245,8 +245,8 @@
            shape = generateShapeBounds(-3,3);       
            var coordString = "\\(";
            // use length -1 since the first one repeats
-           for(var i = 0; i < shape[0].length-1; i ++){    
-               coordString += shape[2][i]+"("+shape[0][i]+", "+shape[1][i]+")~";           
+           for(var i = 0; i < shape.xVals.length-1; i ++){    
+               coordString += shape.letters[i]+"("+shape.xVals[i]+", "+shape.yVals[i]+")~";           
            }
            coordString += "\\)"; 
            var dilated = dilate(shape); // using helper function
@@ -256,18 +256,18 @@
           var msg = "";
            if(random(0,1) == 0){
 
-              msg = "1. Dilate \\("+shape[3]+"\\) using "+dilated.rule+"<br>"; 
+              msg = "1. Dilate \\("+shape.name+"\\) using "+dilated.rule+"<br>"; 
 
            }else{
 
-              msg = "1. Dilate \\("+shape[3]+"\\) using a scale factor of "+dilated.scaleFactor+" about the origin <br>"; 
+              msg = "1. Dilate \\("+shape.name+"\\) using a scale factor of "+dilated.scaleFactor+" about the origin <br>"; 
 
            }
            tempProb += msg;
-           graphShapes= [shape,dilated.transformed];
-           draw([shape],'plot');
+           graphShapes= [[shape.xVals,shape.yVals,shape.letters],dilated.transformed];
+           draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
            $('#plot').show(); 
-           problem = compositions(dilated.transformed,1,tempProb,graphShapes);           
+           problem = compositions(dilated,1,tempProb,graphShapes);           
            break;
            
        }
@@ -340,7 +340,8 @@
          
        }
       var name = getName(letters);
-      return [xValues,yValues,letters,name];
+      
+      return {xVals:xValues,yVals:yValues,letters:letters,name:name};
       
     }
     
@@ -368,24 +369,24 @@
            
            // **Important** Needed to change max & min x & y values to be 8 and -8 so that this doesn't loop forever between 0 and 0
            // Happens when max is 9 and min is -9 for either x or y
-           var xChange = non_zero_random(Math.ceil(-9-getMin(shape[0])),Math.floor(9-getMax(shape[0])));
-           var yChange = non_zero_random(Math.ceil(-9-getMin(shape[1])),Math.floor(9-getMax(shape[1])));
+           var xChange = non_zero_random(Math.ceil(-9-getMin(shape.xVals)),Math.floor(9-getMax(shape.xVals)));
+           var yChange = non_zero_random(Math.ceil(-9-getMin(shape.yVals)),Math.floor(9-getMax(shape.yVals)));
            
            coordinateRule = "\\((x + "+xChange+", y + "+yChange+")\\)";                             
            
-           for(var i = 0; i < shape[0].length; i++){ 
+           for(var i = 0; i < shape.xVals.length; i++){ 
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX+xChange;   // change x
                 tempY = oldY+yChange;   // change y
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }                
            }
                      
@@ -393,7 +394,7 @@
 
            var newName = getName(newLs);
 
-           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates, name:newName};
+           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates, name:newName,xVals:newXs,yVals:newYs,letters:newLs};
     }
     
     // helper function for rotating
@@ -414,19 +415,19 @@
               case 0:              
               rotation = "90° counterclockwise (270° CW) about the origin";
               
-              for(var i = 0; i < shape[0].length; i++){
+              for(var i = 0; i < shape.xVals.length; i++){
                                  
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldY*-1;   // make x = -y
                 tempY = oldX;      // make y = x
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
               }
               
@@ -437,19 +438,19 @@
               
               rotation = "90° clockwise (270° CCW) about the origin";
               
-              for(var i = 0; i < shape[0].length; i++){
+              for(var i = 0; i < shape.xVals.length; i++){
                  
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldY;         // make x = y
                 tempY = oldX*-1;      // make y = -x
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
               }
               
@@ -459,19 +460,19 @@
               case 2:
               rotation = "180° about the origin";
               
-              for(var i = 0; i < shape[0].length; i++){
+              for(var i = 0; i < shape.xVals.length; i++){
                  
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX*-1;         // make x = -x
                 tempY = oldY*-1;      // make y = -y
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
               }
               
@@ -480,7 +481,7 @@
                      
            transformedShape = [newXs,newYs,newLs];
           var newName = getName(newLs);
-           return {transformed:transformedShape, rot:rotation, coor: coordinates, name:newName};
+           return {transformed:transformedShape, rot:rotation, coor: coordinates, name:newName,xVals:newXs,yVals:newYs,letters:newLs};
     }
     
     
@@ -504,19 +505,19 @@
            reflection = "over the \\(x\\)-axis";
            
            // do the reflection
-           for(var i = 0; i < shape[0].length; i++){
+           for(var i = 0; i < shape.xVals.length; i++){
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX;         // keep x the same
                 tempY = oldY*-1;      // make y = -y
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
            }
            break;
@@ -526,44 +527,48 @@
            reflection = "over the \\(y\\)-axis";
            
            // do the reflection
-           for(var i = 0; i < shape[0].length; i++){
+           for(var i = 0; i < shape.xVals.length; i++){
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX*-1;   // make x = -x
                 tempY = oldY;      // keep y the same
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
            }
            break;
            
            // y= equation reflection
            case 2:
-           var a = findReflectionY(shape); // very complicated to do this, use helper function
-           reflection = "over the line \\(y="+a+"\\)";
+           var a = findReflectionY(shape); // very complicated to do this, use helper function 
            
-           if(a === 0){ reflection += " (\\(x\\)-axis)"; }
+           reflection = "over the "; 
+           
+           if(a === 0){ reflection += "\\(x\\)-axis"; }
+           else{
+              reflection+="line \\(y="+a+"\\)";
+           }
           
            // do the reflection
-           for(var i = 0; i < shape[0].length; i++){
+           for(var i = 0; i < shape.xVals.length; i++){
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX;                // keep x the same
                 tempY = oldY-((oldY-a)*2);   // reflect y over the line of reflection
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
            }
            break;
@@ -571,24 +576,27 @@
            // x= equation reflection
            case 3:
            var a = findReflectionX(shape); // very complicated to do this, use helper function
-           reflection = "over the line \\(x="+a+"\\)";
+           reflection = "over the "; 
            
-           if(a === 0){ reflection += " (\\(y\\)-axis)"; }
-          
+           if(a === 0){ reflection += "\\(y\\)-axis"; }
+           else{
+              reflection+="line \\(x="+a+"\\)";
+           }
+
            // do the reflection
-           for(var i = 0; i < shape[0].length; i++){
+           for(var i = 0; i < shape.xVals.length; i++){
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX-((oldX-a)*2);      // reflect x over the line of reflection
                 tempY = oldY;                   // keep y the same
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
            }
            break;
@@ -600,19 +608,19 @@
            reflection = "Reflection over the line \\(y=x\\)";
                      
            // do the reflection
-           for(var i = 0; i < shape[0].length; i++){
+           for(var i = 0; i < shape.xVals.length; i++){
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldY;      // make x = y
                 tempY = oldX;      // make y = x
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }
            }
            break;
@@ -622,7 +630,7 @@
                      
            transformedShape = [newXs,newYs,newLs];
           var newName = getName(newLs);
-           return {transformed:transformedShape, ref:reflection, coor: coordinates, name: newName};
+           return {transformed:transformedShape, ref:reflection, coor: coordinates, name: newName,xVals:newXs,yVals:newYs,letters:newLs};
     }
     
     // helper function for dilating
@@ -639,158 +647,90 @@
                                  
            coordinateRule = "\\(("+sf+"x, "+sf+"y)\\)";                             
            
-           for(var i = 0; i < shape[0].length; i++){ 
+           for(var i = 0; i < shape.xVals.length; i++){ 
                 
-                oldX = parseFloat(shape[0][i]);
-                oldY = parseFloat(shape[1][i]);
+                oldX = parseFloat(shape.xVals[i]);
+                oldY = parseFloat(shape.yVals[i]);
                 
                 tempX = oldX*sf;   // change x
                 tempY = oldY*sf;   // change y
                 
                 newXs.push(tempX);                   
                 newYs.push(tempY);     
-                newLs.push(shape[2][i]+"'");
-                if(i != shape[0].length-1){                 
-                  coordinates += "\\("+shape[2][i]+"' = ("+tempX+", "+tempY+")\\)<br>";
+                newLs.push(shape.letters[i]+"'");
+                if(i != shape.xVals.length-1){                 
+                  coordinates += "\\("+shape.letters[i]+"' = ("+tempX+", "+tempY+")\\)<br>";
                 }                
            }
           var newName = getName(newLs);           
            transformedShape = [newXs,newYs,newLs,newName];
                      
-           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates, name: newName, scaleFactor:sf};
+           return {transformed:transformedShape, rule:coordinateRule, coor: coordinates, name: newName, scaleFactor:sf,xVals:newXs,yVals:newYs,letters:newLs};
     }
     
-    // helper function so that compositions can be done on their own or with dilations first
     function compositions(shape,num,problem,graphShapes){
-       
-       var translated, rotated, reflected, problem;
-         
-           switch(random(0,11)){
-              
-              // translation + rotation
-              case 0:
-              translated = translate(shape); // using helper function              
-              rotated = rotate(translated.transformed); // using helper function
-              graphShapes.push(translated.transformed,rotated.transformed);              
-              problem += (num+1)+". Translate \\("+shape[3]+"\\) using "+translated.rule+"<br>";
-              problem += (num+2)+". Rotate \\("+translated.name+"\\) "+rotated.rot;                                        
-              break;
-              
-              // rotation + translation
-              case 1:
-              rotated = rotate(shape); // using helper function              
-              translated = translate(rotated.transformed); // using helper function
-              graphShapes.push(rotated.transformed,translated.transformed);
-              problem += (num+1)+". Rotate \\("+shape[3]+"\\) "+rotated.rot+"<br>";
-              problem += (num+2)+". Translate \\("+rotated.name+"\\) using "+translated.rule+"<br>";                                    
-              break;
-              
-              // translation + reflection
-              case 2:
-              translated = translate(shape); // using helper function              
-              reflected = reflect(translated.transformed); // using helper function
-              graphShapes.push(translated.transformed,reflected.transformed);
-              problem += (num+1)+". Translate \\("+shape[3]+"\\) using "+translated.rule+"<br>";
-              problem += (num+2)+". Reflect \\("+translated.name+"\\) "+reflected.ref;                                    
-              break;
-              
-              // reflection + translation
-              case 3:
-              reflected = reflect(shape); // using helper function              
-              translated = translate(reflected.transformed); // using helper function
-              graphShapes.push(reflected.transformed,translated.transformed);
-              problem += (num+1)+". Reflect \\("+shape[3]+"\\) "+reflected.ref+"<br>";
-              problem += (num+2)+". Translate \\("+reflected.name+"\\) using "+translated.rule           
-              break;
-              
-              // rotation + reflection
-              case 4:
-              rotated = rotate(shape); // using helper function              
-              reflected = reflect(rotated.transformed); // using helper function
-              graphShapes.push(rotated.transformed,reflected.transformed);
-              problem += (num+1)+". Rotate \\("+shape[3]+"\\) "+rotated.rot+"<br>";
-              problem += (num+2)+". Reflect \\("+rotated.name+"\\) "+reflected.ref;     
-              break;
-              
-              // reflection + rotation
-              case 5:
-              reflected = reflect(shape); // using helper function              
-              rotated = rotate(reflected.transformed); // using helper function
-              graphShapes.push(reflected.transformed,rotated.transformed);
-              problem += (num+1)+". Reflect \\("+shape[3]+"\\) "+reflected.ref+"<br>";
-              problem += (num+2)+". Rotate \\("+reflected.name+"\\) "+rotated.rot;                                        
-              break;
-              
-              // translation, rotation, and reflection
-              case 6:
-              translated = translate(shape); // using helper function  
-              rotated = rotate(translated.transformed); // using helper function              
-              reflected = reflect(rotated.transformed); // using helper function
-              graphShapes.push(translated.transformed,rotated.transformed,reflected.transformed);
-              problem += (num+1)+". Translate \\("+shape[3]+"\\) using "+translated.rule+"<br>";
-              problem += (num+2)+". Rotate \\("+translated.name+"\\) "+rotated.rot+"<br>";                                        
-              problem += (num+3)+". Reflect \\("+rotated.name+"\\) "+reflected.ref;     
-              break;
-              
-              // translation, reflection, and rotation
-              case 7:
-              translated = translate(shape); // using helper function  
-              reflected = reflect(translated.transformed); // using helper function              
-              rotated = rotate(reflected.transformed); // using helper function
-              graphShapes.push(translated.transformed,reflected.transformed,rotated.transformed);
-              problem += (num+1)+". Translate \\("+shape[3]+"\\) using "+translated.rule+"<br>";
-              problem += (num+2)+". Reflect \\("+translated.name+"\\) "+reflected.ref+"<br>";  
-              problem += (num+3)+". Rotate \\("+reflected.name+"\\) "+rotated.rot;             
-              break;
-              
-              // reflection, translation, and rotation
-              case 8:
-              reflected = reflect(shape); // using helper function  
-              translated = translate(reflected.transformed); // using helper function              
-              rotated = rotate(translated.transformed); // using helper function
-              graphShapes.push(reflected.transformed,translated.transformed,rotated.transformed);
-              problem += (num+1)+". Reflect \\("+shape[3]+"\\) "+reflected.ref+"<br>";
-              problem += (num+2)+". Translate \\("+reflected.name+"\\) using "+translated.rule+"<br>";                       
-              problem += (num+3)+". Rotate \\("+translated.name+"\\) "+rotated.rot;             
-              break;
-              
-              // reflection, rotation, and translation
-              case 9:
-              reflected = reflect(shape); // using helper function  
-              rotated = rotate(reflected.transformed); // using helper function              
-              translated = translate(rotated.transformed); // using helper function
-              graphShapes.push(reflected.transformed,rotated.transformed,translated.transformed);
-              problem += (num+1)+". Reflect \\("+shape[3]+"\\) "+reflected.ref+"<br>";
-              problem += (num+2)+". Rotate \\("+reflected.name+"\\) "+rotated.rot+"<br>";
-              problem += (num+3)+". Translate \\("+rotated.name+"\\) using "+translated.rule;                                        
-              break;
-              
-              // rotation, reflection, and translation
-              case 10:
-              rotated = rotate(shape); // using helper function  
-              reflected = reflect(rotated.transformed); // using helper function              
-              translated = translate(reflected.transformed); // using helper function
-              graphShapes.push(rotated.transformed,reflected.transformed,translated.transformed);
-              problem += (num+1)+". Rotate \\("+shape[3]+"\\) "+rotated.rot+"<br>";
-              problem += (num+2)+". Reflect \\("+rotated.name+"\\) "+reflected.ref+"<br>";  
-              problem += (num+3)+". Translate \\("+reflected.name+"\\) using "+translated.rule;                                        
-              break;
-              
-              // rotation, translation, and reflection
-              case 11:
-              rotated = rotate(shape); // using helper function  
-              translated = translate(rotated.transformed); // using helper function              
-              reflected = reflect(translated.transformed); // using helper function
-              graphShapes.push(rotated.transformed,translated.transformed,reflected.transformed);
-              problem += (num+1)+". Rotate \\("+shape[3]+"\\) "+rotated.rot+"<br>";
-              problem += (num+2)+". Translate \\("+rotated.name+"\\) using "+translated.rule+"<br>";  
-              problem += (num+3)+". Reflect \\("+translated.name+"\\) "+reflected.ref;                                                    
-              break;
-           }
-       draw(graphShapes,'answer');
-       return problem;
+
+      // either two or 3 transformations are done for the composition
+      var numTransforms = random(2,3);
+      var transformsDone = []; // use this to keep track : 0 for translation, 1 for rotation, 2 for reflection
+
+      var originalShape = shape;
+      var stepNum = num;
+      var newTransform,newShape;
+
+      for(var i = 0; i < numTransforms; i ++){
+        
+        // pick a new transformation that has not already been done
+        
+        do{
+            newTransform = random(0,2);
+
+        }while(transformsDone.indexOf(newTransform) !== -1);
+
+        // once found, add the new one to the array to keep track
+        transformsDone.push(newTransform);
+
+        newShape = doTransform(newTransform,originalShape);
+        graphShapes.push(newShape.tShape.transformed);
+
+        problem += (num+1)+". "+newShape.transWord+"\\("+originalShape.name+"\\) using "+newShape.transRule+"<br>";
+        num++;
+        
+         // set the originalShape to the new one in case there are more transformations to be done
+        originalShape = newShape.tShape; 
+
+      }
+      draw(graphShapes,'answer');
+      return problem;
     }
-    
+
+    // helper function for compositions
+    function doTransform(transformationNumber,shapeToTransform){
+      
+      var transformedShape,transWord,transRule;
+
+      switch(transformationNumber){
+          // translation
+          case 0: 
+            transformedShape = translate(shapeToTransform); 
+            transWord = "Translate ";
+            transRule = transformedShape.rule;
+          break;
+          case 1: 
+            transformedShape = rotate(shapeToTransform); 
+            transWord = "Rotate ";
+            transRule = transformedShape.rot;
+          break;
+          case 2: 
+            transformedShape = reflect(shapeToTransform); 
+            transWord = "Reflect ";
+            transRule = transformedShape.ref;
+          break;
+      }
+
+      return {tShape:transformedShape,transWord:transWord,transRule:transRule};
+
+    }
     
     // helper function to find the smallest value in an array of numbers
     function getMin(array){
@@ -809,8 +749,8 @@
     // helper function to determine which value of a for y=a will reflect the shape and keep it on the grid
     function findReflectionY(shape){
         
-        var min = Math.floor(getMax(shape[1])/2)-4;
-        var max = Math.floor(getMin(shape[1])/2)+4;
+        var min = Math.floor(getMax(shape.yVals)/2)-4;
+        var max = Math.floor(getMin(shape.yVals)/2)+4;
         
         return random(min,max);
       
@@ -819,8 +759,8 @@
     // helper function to determine which value of a for y=a will reflect the shape and keep it on the grid
     function findReflectionX(shape){
         
-        var min = Math.floor(getMax(shape[0])/2)-4;
-        var max = Math.floor(getMin(shape[0])/2)+4;
+        var min = Math.floor(getMax(shape.xVals)/2)-4;
+        var max = Math.floor(getMin(shape.xVals)/2)+4;
         
         return random(min,max);
       
