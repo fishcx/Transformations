@@ -91,7 +91,7 @@
            
            if(createShape){
               // apply a translation to coordinate(s) on a grid to produce new coordinate(s)
-              problem = "Translate \\("+shape.name+"\\) using"+tr.rule;    
+              problem = "Translate \\("+shape.name+"\\) "+tr.rule;    
               problem += "<br>"+coordString;
               draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
@@ -101,7 +101,7 @@
            else {
               // determine the rule for the graphed translation
               problem = "Determine the rule used to do the translation below";
-              answer = tr.rule;
+              answer = "Translation "+tr.rule;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
@@ -372,7 +372,7 @@
            var xChange = non_zero_random(Math.ceil(-9-getMin(shape.xVals)),Math.floor(9-getMax(shape.xVals)));
            var yChange = non_zero_random(Math.ceil(-9-getMin(shape.yVals)),Math.floor(9-getMax(shape.yVals)));
            
-           coordinateRule = "\\((x + "+xChange+", y + "+yChange+")\\)";                             
+           coordinateRule = "using \\((x + "+xChange+", y + "+yChange+")\\)";                             
            
            for(var i = 0; i < shape.xVals.length; i++){ 
                 
@@ -693,7 +693,7 @@
         newShape = doTransform(newTransform,originalShape);
         graphShapes.push(newShape.tShape.transformed);
 
-        problem += (num+1)+". "+newShape.transWord+"\\("+originalShape.name+"\\) using "+newShape.transRule+"<br>";
+        problem += (num+1)+". "+newShape.transWord+"\\("+originalShape.name+"\\) "+newShape.transRule+"<br>";
         num++;
         
          // set the originalShape to the new one in case there are more transformations to be done
