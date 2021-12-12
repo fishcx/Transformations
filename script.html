@@ -182,8 +182,6 @@
            
            break;
            
-           
-           
            // Dilations
            case 4: 
            shape = generateShapeBounds(-3,3);
@@ -235,9 +233,26 @@
            coordString += "\\)"; 
            var tempProb = "Perform the following transformations to the shape below: <br>"+coordString+"<br>";             
            graphShapes=[[shape.xVals,shape.yVals,shape.letters]];
-           draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
-           $('#plot').show(); 
-           problem = compositions(shape,0,tempProb,graphShapes);   
+          var comp = compositions(shape,0,tempProb,graphShapes); 
+
+          if(createShape){
+              
+              // apply a composition of transformations
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
+              $('#plot').show(); 
+              draw(graphShapes,'answer');
+              problem = comp.prob; 
+
+           }else{
+              
+              // determine the sequence of transformations
+              problem = "Determine a sequence of transformations to get from the original to the image. <br>There are multiple correct answers";
+              answer = comp.prob;
+              draw([[shape.xVals,shape.yVals,shape.letters],comp.lastShape],'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+           }
+
            break;
            
            // Compositions with Dilations first
@@ -265,9 +280,26 @@
            }
            tempProb += msg;
            graphShapes= [[shape.xVals,shape.yVals,shape.letters],dilated.transformed];
-           draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
-           $('#plot').show(); 
-           problem = compositions(dilated,1,tempProb,graphShapes);           
+           var comp = compositions(dilated,1,tempProb,graphShapes);
+
+           if(createShape){
+              
+              // apply a composition of transformations with dilations
+              draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
+              $('#plot').show(); 
+              draw(graphShapes,'answer');
+              problem = comp.prob; 
+
+           }else{
+              
+              // determine the sequence of transformations with a dilation
+              problem = "Determine a sequence of transformations to get from the original to the image. <br>There are multiple correct answers";
+              answer = comp.prob;
+              draw([[shape.xVals,shape.yVals,shape.letters],comp.lastShape],'plot');
+              $('#plot').show();
+              $("#answer").html(doublesigns(answer));
+           }
+        
            break;
            
        }
@@ -693,15 +725,16 @@
         newShape = doTransform(newTransform,originalShape);
         graphShapes.push(newShape.tShape.transformed);
 
-        problem += (num+1)+". "+newShape.transWord+"\\("+originalShape.name+"\\) "+newShape.transRule+"<br>";
-        num++;
+        problem += (stepNum+1)+". "+newShape.transWord+"\\("+originalShape.name+"\\) "+newShape.transRule+"<br>";
+        stepNum++;
         
          // set the originalShape to the new one in case there are more transformations to be done
         originalShape = newShape.tShape; 
+        
+      } 
+      var lastOne = graphShapes[numTransforms+num];
 
-      }
-      draw(graphShapes,'answer');
-      return problem;
+      return {prob:problem, answerShapes:graphShapes, lastShape:lastOne};
     }
 
     // helper function for compositions
