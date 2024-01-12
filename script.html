@@ -233,7 +233,7 @@
            coordString += "\\)"; 
            var tempProb = "Perform the following transformations to the shape below: <br>"+coordString+"<br>";             
            graphShapes=[[shape.xVals,shape.yVals,shape.letters]];
-          var comp = compositions(shape,0,tempProb,graphShapes); 
+          var comp = compositions(shape,0,graphShapes); 
 
           if(createShape){
               
@@ -241,7 +241,7 @@
               draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show(); 
               draw(graphShapes,'answer');
-              problem = comp.prob; 
+              problem = tempProb +""+comp.prob; 
 
            }else{
               
@@ -280,7 +280,7 @@
            }
            tempProb += msg;
            graphShapes= [[shape.xVals,shape.yVals,shape.letters],dilated.transformed];
-           var comp = compositions(dilated,1,tempProb,graphShapes);
+           var comp = compositions(dilated,1,graphShapes);
 
            if(createShape){
               
@@ -288,13 +288,13 @@
               draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show(); 
               draw(graphShapes,'answer');
-              problem = comp.prob; 
+              problem = tempProb+""+comp.prob; 
 
            }else{
               
               // determine the sequence of transformations with a dilation
               problem = "Determine a sequence of transformations to get from the original to the image. <br>There are multiple correct answers";
-              answer = comp.prob;
+              answer = msg+""+comp.prob;
               draw([[shape.xVals,shape.yVals,shape.letters],comp.lastShape],'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
@@ -700,8 +700,8 @@
            return {transformed:transformedShape, rule:coordinateRule, coor: coordinates, name: newName, scaleFactor:sf,xVals:newXs,yVals:newYs,letters:newLs};
     }
     
-    function compositions(shape,num,problem,graphShapes){
-
+    function compositions(shape,num,graphShapes){
+      var problem ="";
       // either two or 3 transformations are done for the composition
       var numTransforms = random(2,3);
       var transformsDone = []; // use this to keep track : 0 for translation, 1 for rotation, 2 for reflection
