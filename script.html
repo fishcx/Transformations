@@ -29,7 +29,7 @@
         
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,6);}
+        if($("#type").val()=="any"){type = random(1,7);}
         else{type = parseInt($("#type").val())}
 
         if(type<7){ $("#transButtons").show(); }else{ $("#transButtons").hide(); }
@@ -313,7 +313,8 @@
             var refAngle = random(45,125);
             $('#plot').show();
             var parallelHelper = getParallelProblem(refAngle);                           
-            drawParallel(1,'plot',refAngle,parallelHelper);   
+            drawParallel(1,'plot',refAngle,parallelHelper);  
+            problem = "Lines \\(m\\) and \\(n\\) are parallel. Find the value of \\(x\\)."; 
             $("#answer").html(parallelHelper.ans);
            break;
           
@@ -1060,8 +1061,25 @@
             name:"",
             hoverinfo:'none'
          };
+
+         var lineLabels = {  
+            x: [9,9],
+            y: [8,2],
+            mode: 'text',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+            text: ["m","n"],
+            textposition: "bottom",
+            textfont: {
+              size:18,
+            },
+            name:"",
+            hoverinfo:'none'
+         };
          
-         data.push(trace1,trace2,trace3,trace4,trace5);
+         data.push(trace1,trace2,trace3,trace4,trace5,lineLabels);
       
       var axis_template ={
         showgrid: false,
