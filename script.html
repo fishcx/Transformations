@@ -5,6 +5,8 @@
         $('#generate').click();
     });
 
+    $("#transButtons").hide();
+
     $(document).keypress(function (e) {
         var key = e.which;
          if(key == 13)  // the enter key code
@@ -25,11 +27,12 @@
         // determine if create shape active or not
         if($("#toggle").is(':checked')){  createShape = false;  }
         
-
         var type;
         // handles the formatting for selecting any type
         if($("#type").val()=="any"){type = random(1,6);}
         else{type = parseInt($("#type").val())}
+
+        if(type<7){ $("#transButtons").show(); }else{ $("#transButtons").hide(); }
 
         generate(type,createShape);       
      });
@@ -55,7 +58,9 @@
                          "https://www.youtube.com/watch?v=ii0nhp0gxEs",
                          "https://www.youtube.com/watch?v=hig70dJNszk",
                          "https://www.youtube.com/watch?v=cCEOefbaLak",
-                         "https://www.youtube.com/watch?v=qXXcQZ5S9Vc"];
+                         "https://www.youtube.com/watch?v=qXXcQZ5S9Vc",
+                         "",
+                         ""];
        
        if(videoLinks[type-1].length != 0){ 
          $("#videoLink"). attr("href", videoLinks[type-1]);
@@ -300,6 +305,21 @@
               $("#answer").html(doublesigns(answer));
            }
         
+           break;
+
+           // Transversal Angles
+           case 7:
+
+            var refAngle = random(45,125);
+            $('#plot').show();
+            var parallelHelper = getParallelProblem(refAngle);                           
+            drawParallel(1,'plot',refAngle,parallelHelper);   
+            $("#answer").html(parallelHelper.ans);
+           break;
+          
+           // Transversal Equations
+           case 8:
+
            break;
            
        }
@@ -799,7 +819,337 @@
       
     }
     
-    // function that draws the shapes using coordinates
+    // helper function for parallel lines with a transversal
+    function getParallelProblem(refAngle){
+
+      // angle positions 1 through 4 clockwise starting with top left and then 5-8 for bottom group
+      var anglePos1 = random(1,8); 
+      var anglePos2; 
+
+      do{ anglePos2 = random(1,8); } while( anglePos1 === anglePos2 )
+
+      var angle1Info = getLocationInfo(refAngle,anglePos1,false);
+      var angle2Info = getLocationInfo(refAngle,anglePos2,true);
+
+      var supp = 180-refAngle;
+      var answer = "";
+      var angleAns = "";
+
+      if(isOdd(anglePos2)){
+          angleAns = refAngle+"°";
+      }else{
+          angleAns = supp+"°";
+      }
+      answer = angleAns;
+
+      if( Math.abs(anglePos2-anglePos1) === 4 ){
+
+        answer = answer+", corresponding angles";
+
+      }
+      else if( (isOdd(anglePos1) && !isOdd(anglePos2)) || (!isOdd(anglePos1) && isOdd(anglePos2))  ){
+        
+        answer = answer +", supplementary angles";
+
+      }
+      else if( ((anglePos1 < 5) && (anglePos2 < 5 ) && (Math.abs(anglePos1-anglePos2) == 2) ) || ((anglePos1 > 4) && (anglePos2 > 4 ) && (Math.abs(anglePos1-anglePos2) == 2) ) ){
+
+        answer = answer +", vertical angles";
+
+      }
+      else if( (anglePos1 < 3) || (anglePos1 > 6) ){
+
+        answer = answer +", alternate exterior angles"
+
+      }
+      else{
+
+        answer = answer +", alternate interior angles"
+
+      }
+
+      return {angle1:angle1Info, angle2: angle2Info, ans: answer};
+
+    }
+
+    function getLocationInfo(refAngle,angleNum,isVar){
+
+        var dist = formatDec(6/Math.tan(refAngle*Math.PI/180));
+        var xPos = 0;      
+        var supp = 180-refAngle;
+        var info = {xPos: 0,yPos: 0, label:"", pos: ""};
+
+        if(isVar){
+          info.label = "x";
+        }
+        else{
+          if(isOdd(angleNum)){ info.label = refAngle+"°"; }
+          else { info.label = supp+"°"; }
+        }
+        switch(angleNum){
+
+        case 1:
+        xPos = -1*dist;
+        if(refAngle < 90){xPos = xPos - .5;}
+        if(refAngle < 80){xPos = xPos - 1;}
+        if(refAngle < 55){xPos = xPos - 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 8.5;
+        info.pos = 'top-left';
+        break;
+
+        case 2:
+        xPos = -1*dist;
+        if(supp < 90){xPos = xPos + .5;}
+        if(supp < 80){xPos = xPos + 1;}
+        if(supp < 55){xPos = xPos + 1.5;}
+        
+        info.xPos = xPos;
+        info.yPos = 8.5;
+        info.pos = 'top-right';
+        break;
+
+        case 3:
+        xPos = -1*dist;
+        if(refAngle < 90){xPos = xPos + .5;}
+        if(refAngle < 80){xPos = xPos + 1;}
+        if(refAngle < 55){xPos = xPos + 1.5;}
+        
+        info.xPos = xPos;
+        info.yPos = 7.5;
+        info.pos = 'bottom-right';
+        break;
+
+        case 4:
+        xPos = -1*dist;
+        if(supp < 90){xPos = xPos - .5;}
+        if(supp < 80){xPos = xPos - 1;}
+        if(supp < 55){xPos = xPos - 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 7.5;
+        info.pos = 'bottom-left';
+        break;
+
+        case 5:
+        xPos = dist;
+        if(refAngle < 90){xPos = xPos - .5;}
+        if(refAngle < 80){xPos = xPos - 1;}
+        if(refAngle < 55){xPos = xPos - 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 2.5;
+        info.pos = 'top-left';
+        break;
+
+        case 6:
+        xPos = dist;
+        if(supp < 90){xPos = xPos + .5;}
+        if(supp < 80){xPos = xPos + 1;}
+        if(supp < 55){xPos = xPos + 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 2.5;
+        info.pos = 'top-right';
+        break;
+
+        case 7:
+        xPos = dist;
+        if(refAngle < 90){xPos = xPos + .5;}
+        if(refAngle < 80){xPos = xPos + 1;}
+        if(refAngle < 55){xPos = xPos + 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 1.5;
+        info.pos = 'bottom-right';
+        break;
+
+        case 8:
+        xPos = dist;
+        if(supp < 90){xPos = xPos - .5;}
+        if(supp < 80){xPos = xPos - 1;}
+        if(supp < 55){xPos = xPos - 1.5;}
+
+        info.xPos = xPos;
+        info.yPos = 1.5;
+        info.pos = 'bottom-left';
+        break;
+
+      }
+
+        return info;
+    }
+
+    // function that draws parallel lines with a transversal
+    function drawParallel(type,location,referenceAngle,paraHelper) {
+     
+     var data = [];
+
+         var trace1 = {  
+            x: [-11,11],
+            y: [8,8],
+            type: 'scatter',
+            mode: 'lines',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+            name:"",
+         };
+
+         var trace2 = {  
+            x: [-11,11],
+            y: [2,2],
+            type: 'scatter',
+            mode: 'lines',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+         };
+
+        var dist = formatDec(14/Math.tan(referenceAngle*Math.PI/180));
+        
+         var trace3 = {  
+            x: [-1*dist,dist],
+            y: [12,-2],
+            type: 'scatter',
+            mode: 'lines',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+         };
+
+        //angle1Info = {xPos: 0,yPos: 0, label:"", pos: ""};
+        var ang1 = paraHelper.angle1;
+
+         var trace4 = {  
+            x: [ang1.xPos],
+            y: [ang1.yPos],
+            mode: 'text',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+            text: [ang1.label],
+            textposition: ang1.pos,
+            textfont: {
+              size:18,
+            },
+            name:"",
+            hoverinfo:'none'
+         };
+
+        var ang2 = paraHelper.angle2;
+
+         var trace5 = {  
+            x: [ang2.xPos],
+            y: [ang2.yPos],
+            mode: 'text',        
+            line: {
+              color: 'black',
+              width: 2
+            },
+            text: [ang2.label],
+            textposition: ang2.pos,
+            textfont: {
+              size:18,
+            },
+            name:"",
+            hoverinfo:'none'
+         };
+         
+         data.push(trace1,trace2,trace3,trace4,trace5);
+      
+      var axis_template ={
+        showgrid: false,
+        zeroline: false,
+        nticks: 23,
+        range: [-11,11], 
+        gridcolor: '#BDBDBD', //grid color
+        gridwidth: 1.2, //grid width
+        zerolinecolor: 'black', // axes color
+        zerolinewidth: 1.5, // axes widths
+        showticklabels:false
+      };        
+      
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 550;
+         indent = 20;
+      }else{
+         gridsize = 350;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        hovermode: 'closest',   
+        font:{size: 18},
+        margin: {l: indent,  r: 30, t: 20}
+      };
+      
+      layout.annotations= [
+      {
+        x: 11,
+        y: 8,
+        showarrow: true,
+        arrowsize:2,
+        arrowwidth:1,
+        arrowhead:3,
+        arrowcolor:"#000000",
+        ax: -35,
+        ay: 0
+      },
+      {
+        x: -11,
+        y: 8,
+        showarrow: true,
+        arrowsize:2,
+        arrowwidth:1,
+        arrowhead:3,
+        arrowcolor:"#00000",
+        ax: 35,
+        ay: 0
+      },
+      {
+        x: 11,
+        y: 2,
+        showarrow: true,
+        arrowsize:2,
+        arrowwidth:1,
+        arrowhead:3,
+        arrowcolor:"#000000",
+        ax: -35,
+        ay: 0
+      },
+      {
+        x: -11,
+        y: 2,
+        showarrow: true,
+        arrowsize:2,
+        arrowwidth:1,
+        arrowhead:3,
+        arrowcolor:"#00000",
+        ax: 35,
+        ay: 0
+      }
+   ];
+      
+      Plotly.newPlot(location, data, layout,{displayModeBar: false});
+  }
+
+  // function that draws the shapes using coordinates
     function draw(shapes, location) {
     
     // shapes = [ [xVals[], yVals[], letters[]], [xVals[], yVals[], letters[]]...]
@@ -951,6 +1301,7 @@
       
       Plotly.newPlot(location, data, layout,{displayModeBar: false});
   }
+
   function genCharArray(charA, charZ) {
     var a = [], i = charA.charCodeAt(0), j = charZ.charCodeAt(0);
     for (; i <= j; ++i) {
