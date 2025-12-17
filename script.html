@@ -896,7 +896,6 @@
 
       // get one expression that has an answer of x and angle measure of refAngle
       var exp1 = getOneExpression(refAngle,x);
-      var coef1 = exp1[0];
 
       out[0] = exp1[1]; 
 
@@ -912,14 +911,14 @@
       do{ 
         exp3 = getOneExpression(180-refAngle,x);
         out[2] = exp3[1]; 
-      } while( exp3[0] == (-1*exp1[0]) );
+      } while( (exp3[0] == (-1*exp1[0])) || ((exp3[0] == (-1*exp2[0]))) );
 
       // get a different expression with angle measure of 180-refAngle
       var exp4;
       do{ 
         exp4 = getOneExpression(180-refAngle,x);
         out[3] = exp4[1]; 
-      } while( (exp4[0] == -1*exp2[0]) || (out[2] ==  out[3]) );
+      } while( (exp4[0] == -1*exp2[0]) || (out[2] ==  out[3]) || (exp4[0] == (-1*exp1[0])));
 
       return out;
 
