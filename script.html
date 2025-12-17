@@ -29,7 +29,7 @@
         
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,7);}
+        if($("#type").val()=="any"){type = random(1,8);}
         else{type = parseInt($("#type").val())}
 
         if(type<7){ $("#transButtons").show(); }else{ $("#transButtons").hide(); }
@@ -309,10 +309,9 @@
 
            // Transversal Angles
            case 7:
-
             var refAngle = random(45,125);
             $('#plot').show();
-            var parallelHelper = getParallelProblem(refAngle);                           
+            var parallelHelper = getParallelProblem(refAngle,false);                           
             drawParallel(1,'plot',refAngle,parallelHelper);  
             problem = "Lines \\(m\\) and \\(n\\) are parallel. Find the value of \\(x\\)."; 
             $("#answer").html(parallelHelper.ans);
@@ -320,15 +319,18 @@
           
            // Transversal Equations
            case 8:
-
+            var refAngle = random(60,120);
+            $('#plot').show();
+            var parallelHelper = getParallelProblem(refAngle,true);                           
+            drawParallel(1,'plot',refAngle,parallelHelper);  
+            problem = "Lines \\(m\\) and \\(n\\) are parallel. Find the value of \\(x\\)."; 
+            $("#answer").html(parallelHelper.ans);
            break;
            
        }
             
        $("#generated").html(doublesigns(problem));              
        renderMathInElement(document.body);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
-       
 	}
     
     function generateShape(){
@@ -821,7 +823,7 @@
     }
     
     // helper function for parallel lines with a transversal
-    function getParallelProblem(refAngle){
+    function getParallelProblem(refAngle,isEquation){
 
       // angle positions 1 through 4 clockwise starting with top left and then 5-8 for bottom group
       var anglePos1 = random(1,8); 
@@ -829,19 +831,33 @@
 
       do{ anglePos2 = random(1,8); } while( anglePos1 === anglePos2 )
 
-      var angle1Info = getLocationInfo(refAngle,anglePos1,false);
-      var angle2Info = getLocationInfo(refAngle,anglePos2,true);
+      var angle1Info, angle2Info;
 
       var supp = 180-refAngle;
       var answer = "";
       var angleAns = "";
 
-      if(isOdd(anglePos2)){
+      if(!isEquation){
+
+        angle1Info = getLocationInfo(refAngle,anglePos1,false,false,[]);
+        angle2Info = getLocationInfo(refAngle,anglePos2,true,false,[]);
+
+        if(isOdd(anglePos2)){
           angleAns = refAngle+"°";
-      }else{
+        }else{
           angleAns = supp+"°";
+        }
+        answer = `\\(x = ${angleAns}\\)`;
+
+      }else{
+        
+        var angleExps = getAngleExpression(refAngle);
+
+        angle1Info = getLocationInfo(refAngle,anglePos1,false,true,[angleExps[0],angleExps[2]]);
+        angle2Info = getLocationInfo(refAngle,anglePos2,true,true,[angleExps[1],angleExps[3]]);
+
+        answer = `\\(x = ${angleExps[4]}\\)`;
       }
-      answer = angleAns;
 
       if( Math.abs(anglePos2-anglePos1) === 4 ){
 
@@ -873,19 +889,77 @@
 
     }
 
-    function getLocationInfo(refAngle,angleNum,isVar){
+    function getAngleExpression(refAngle){
+      
+      var x = non_zero_random(-10,10);
+      var out = [0,0,0,0,x]
+
+      // get one expression that has an answer of x and angle measure of refAngle
+      var exp1 = getOneExpression(refAngle,x);
+      var coef1 = exp1[0];
+
+      out[0] = exp1[1]; 
+
+      // get a different expression with angle measure of refAngle
+      var exp2;
+      do{ 
+        exp2 = getOneExpression(refAngle,x);
+        out[1] = exp2[1]; 
+      } while( out[0] == out[1] );  
+
+      // get one expression that has an answer of x and angle measure of 180-refAngle
+      var exp3;
+      do{ 
+        exp3 = getOneExpression(180-refAngle,x);
+        out[2] = exp3[1]; 
+      } while( exp3[0] == (-1*exp1[0]) );
+
+      // get a different expression with angle measure of 180-refAngle
+      var exp4;
+      do{ 
+        exp4 = getOneExpression(180-refAngle,x);
+        out[3] = exp4[1]; 
+      } while( (exp4[0] == -1*exp2[0]) || (out[2] ==  out[3]) );
+
+      return out;
+
+    }
+
+    function getOneExpression(angle,x){
+
+      var coef = non_zero_random(-9,9);
+      var cons = angle - (coef*x);
+      var symb = " + "
+      if(cons < 0){
+          symb = " - ";
+      }
+      cons = Math.abs(cons);
+
+      return [coef, `${coef}x ${symb} ${cons}`];
+
+    }
+
+    function getLocationInfo(refAngle,angleNum,isVar,isEquation,equationLabels){
 
         var dist = formatDec(6/Math.tan(refAngle*Math.PI/180));
         var xPos = 0;      
         var supp = 180-refAngle;
         var info = {xPos: 0,yPos: 0, label:"", pos: ""};
 
-        if(isVar){
-          info.label = "x";
+        if(!isEquation){
+          if(isVar){
+            info.label = "x";
+          }
+          else{
+            if(isOdd(angleNum)){ info.label = refAngle+"°"; }
+            else { info.label = supp+"°"; }
+          }
         }
         else{
-          if(isOdd(angleNum)){ info.label = refAngle+"°"; }
-          else { info.label = supp+"°"; }
+          
+           if(isOdd(angleNum)){ info.label = equationLabels[0]; }
+           else { info.label = equationLabels[1]; }
+
         }
         switch(angleNum){
 
