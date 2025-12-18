@@ -891,7 +891,7 @@
 
     function getAngleExpression(refAngle){
       
-      var x = non_zero_random(-10,10);
+      var x = non_zero_random(-20,20);
       var out = [0,0,0,0,x]
 
       // get one expression that has an answer of x and angle measure of refAngle
@@ -926,7 +926,7 @@
 
     function getOneExpression(angle,x){
 
-      var coef = non_zero_random(-9,9);
+      var coef = non_zero_random(-5,5);
       var cons = angle - (coef*x);
       var symb = " + "
       if(cons < 0){
