@@ -926,11 +926,11 @@
 
     function getOneExpression(angle,x){
       var coef, cons;
-
-      coef = random(1,9);
-      if(x < 0){coef = coef*-1;} // this helps to keep the constant to a smaller value
-      cons = angle - (coef*x);
       
+        coef = random(1,Math.floor(angle/Math.abs(x))); 
+        if(x < 0){coef = coef*-1;} // this helps to keep the constant to a smaller value
+        cons = angle - (coef*x);
+
       var symb = " + "
       if(cons < 0){
           symb = " - ";
