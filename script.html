@@ -926,7 +926,7 @@
 
     function getOneExpression(angle,x){
       var coef, cons;
-      
+
         coef = random(1,Math.floor(angle/Math.abs(x))); 
         if(x < 0){coef = coef*-1;} // this helps to keep the constant to a smaller value
         cons = angle - (coef*x);
@@ -1265,17 +1265,58 @@
             x: shapes[i][0],
             y: shapes[i][1],
             type: 'scatter',
-            mode: 'lines+markers+text',        
+            mode: 'lines+markers',        
+            // mode: 'lines+markers+text',        
             line: {
               color: colors[i],
-              width: 2
+              width: 3
             },
-            text: shapes[i][2],
-            textposition: 'bottom',
+           //  text: shapes[i][2],
+           //  textposition: 'center',
             name:"",
          };
+
+          var labely = [];
+          var minY = Math.min(...shapes[i][1]);
+          var maxY = Math.max(...shapes[i][1]);
+          
+          for(var j = 0; j < shapes[i][1].length; j++){
+              
+              var curr = shapes[i][1][j];
+
+              if(curr == minY){ labely.push(curr-0.5); }
+              else if(curr == maxY){ labely.push(curr+0.5); }
+              else{ labely.push(curr); }
+
+          }
+
+          var labelx = [];
+          var minX = Math.min(...shapes[i][0]);
+          var maxX = Math.max(...shapes[i][0]);
+          
+          for(var j = 0; j < shapes[i][0].length; j++){
+              
+              var curr = shapes[i][0][j];
+
+              if(curr == minX){ labelx.push(curr-0.5); }
+              else if(curr == maxX){ labelx.push(curr+0.5); }
+              else{ labelx.push(curr); }
+
+          }
+
+         var newTraceLabels = {  
+            x: labelx,
+            y: labely,
+            mode: 'text',        
+            text: shapes[i][2],
+            textposition: 'center',
+            name:"",
+            textfont: {
+              size:20,
+            },
+         };
          
-         data.push(newTrace);
+         data.push(newTrace,newTraceLabels);
       }
       
       var axis_template ={
