@@ -101,7 +101,6 @@
               draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
               $('#plot').show();                           
               draw(graphShapes,'answer');              
-              
            }
            else {
               // determine the rule for the graphed translation
@@ -110,8 +109,6 @@
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
-              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-              
            }
            
            break;
@@ -139,15 +136,12 @@
               $('#plot').show();                           
               draw(graphShapes,'answer');
            }else{
-              
               // determine the rotation used for a graphed figure
               problem = "Determine how to get from the original shape to the image";
               answer = "Rotation of "+rotated.rot;
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
-              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
-
            }                
            
            break;
@@ -168,7 +162,6 @@
            if(createShape){
               
               // apply a reflection to coordinate(s) on a grid to produce new coordinate(s)
-
               problem = "Reflect \\("+shape.name+"\\) "+reflected.ref;
               problem += "<br>"+coordString;
               draw([[shape.xVals,shape.yVals,shape.letters]],'plot');
@@ -182,7 +175,6 @@
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
-              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
            }
            
            break;
@@ -223,7 +215,6 @@
               draw(graphShapes,'plot');
               $('#plot').show();
               $("#answer").html(doublesigns(answer));
-              //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
            }  
            break;
            
@@ -352,7 +343,7 @@
        // Happens when max is 9 and min is -9 for either x or y
        
        switch(random(0,2)){
-         
+
          // triangle
          case 0:
          x1 = random(min, max/2); 
@@ -381,13 +372,18 @@
         
          // parallelogram
          case 2:
-         x1 = random(min, max/2);
-         y1 = random(min, max/2);
-         y2 = random(y1+1,max);
-         x2 = random(x1+3,max);
-         x3 = random(x1+1,x2-1);
-         x4 = x2-(x3-x1);
-         
+
+        do{
+
+          x1 = random(min, max/2);
+          y1 = random(min, max/2);
+          y2 = random(y1+1,max);
+          x2 = random(x1+3,max);
+          x3 = random(x1+1,x2-1);
+          x4 = x2-(x3-x1);
+        }
+        while(x2 > max || x3 > max || x4 > max);
+
          xValues = [x1,x4,x2,x3,x1];
          yValues = [y1,y1,y2,y2,y1];
          letters = ['A','B','C','D','A'];
@@ -698,7 +694,7 @@
            var oldX, oldY, tempX, tempY;           
            var coordinateRule = "";
            var coordinates = "";
-           var sf = random(1.5, 2.5, 0.5);
+           var sf = [1.5,2,2.5,3][random(0,3)];
                                  
            coordinateRule = "\\(("+sf+"x, "+sf+"y)\\)";                             
            
